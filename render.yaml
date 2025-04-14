@@ -1,0 +1,6 @@
+services:
+  - type: static
+    name: pelican-portfolio
+    env: static
+    buildCommand: pip install pelican && pelican content
+    staticPublishPath: output
