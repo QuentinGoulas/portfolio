@@ -35,5 +35,5 @@ app.run(host='0.0.0.0', port=5000, debug=True)
 #     except Exception as e:
 #         return f"<h1>Erreur lors du chargement des données : {e}</h1>"
 
-if __name__ == "__main__":
-    app.run(debug=True)
+# if __name__ == "__main__":
+#     app.run(debug=True)
