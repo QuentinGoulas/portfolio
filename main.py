@@ -25,3 +25,6 @@ def index():
 def serve_image(category, filename):
     image_folder = os.path.join(BASE_IMAGE_PATH, category)
     return send_from_directory(image_folder, filename)
+
+if __name__ == "__main__":
+    app.run(debug=True)
