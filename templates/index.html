@@ -5,35 +5,69 @@
     <meta charset="UTF-8">
     <title>Mon Portfolio Photo</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .tabs button {
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
 </head>
 
 <body>
     <h1>📸 Mon Portfolio</h1>
 
     <div class="tabs">
-        {% for category in images_by_category %}
-        <button onclick="showTab('{{ category }}')">{{ category.capitalize() }}</button>
+        {% for category in categories %}
+        <button onclick="showTab('{{ category }}')">{{ category | capitalize }}</button>
         {% endfor %}
     </div>
 
-    {% for category, images in images_by_category.items() %}
-    <div class="gallery tab-content" id="{{ category }}">
-        {% for img in images %}
-        <div class="card">
-            <img src="{{ img }}" alt="photo" onclick="openLightbox(this.src)">
+    {% for category, images in categories.items() %}
+    <div id="{{ category }}" class="tab-content">
+        <div class="gallery">
+            {% for img in images %}
+            <div class="card">
+                <img src="{{ img }}" alt="photo" onclick="openLightbox(this.src)">
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
     {% endfor %}
 
-    <!-- Lightbox -->
     <div id="lightbox" onclick="closeLightbox()">
-        <span class="close">×</span>
+        <span class="close" onclick="closeLightbox()">×</span>
         <img id="lightbox-img" src="" alt="grande image">
     </div>
 
     <script>
+        function showTab(category) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.getElementById(category).classList.add('active');
+        }
+
+        window.onload = () => {
+            const first = document.querySelector('.tab-content');
+            if (first) first.classList.add('active');
+        }
+
         function openLightbox(src) {
             const lightbox = document.getElementById("lightbox");
             const lightboxImg = document.getElementById("lightbox-img");
@@ -43,26 +77,6 @@
 
         function closeLightbox() {
             document.getElementById("lightbox").style.display = "none";
-        }
-    </script>
-    <script>
-        function showTab(category) {
-            const contents = document.querySelectorAll('.tab-content');
-            contents.forEach(div => {
-                div.classList.remove('active');
-            });
-
-            const current = document.getElementById(category);
-            if (current) {
-                current.classList.add('active');
-            }
-        }
-
-        window.onload = () => {
-            const first = document.querySelector('.tab-content');
-            if (first) {
-                first.classList.add('active');
-            }
         }
     </script>
 </body>
