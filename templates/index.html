@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Mon Portfolio Photo</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">s
     <style>
         .tabs {
             display: flex;
@@ -43,7 +43,7 @@
         <div class="gallery">
             {% for img in images %}
             <div class="card">
-                <img src="{{ img }}" alt="photo" loading="lazy" onclick="openLightbox(this.src)">
+                <img src="{{ img }}" alt="photo" onclick="openLightbox(this.src)">
             </div>
             {% endfor %}
         </div>

@@ -5,6 +5,8 @@ app = Flask(__name__)
 
 # Emplacement des images, à adapter selon ton VPS
 BASE_IMAGE_PATH = "/home/ubuntu/fichiers/photos/portfolio"
+if os.name == "nt":
+    BASE_IMAGE_PATH = "C:\\Users\\goula\\Pictures\\Photos Portfolio -20250420T011033Z-001\\Photos Portfolio"
 
 @app.route("/")
 def index():
@@ -27,4 +29,4 @@ def serve_image(category, filename):
     return send_from_directory(image_folder, filename)
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=5000)
+    app.run(debug=True,host='0.0.0.0' ,port=5000)
