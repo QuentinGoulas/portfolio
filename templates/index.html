@@ -43,7 +43,7 @@
         <div class="gallery">
             {% for img in images %}
             <div class="card">
-                <img src="{{ img }}" alt="photo" onclick="openLightbox(this.src)">
+                <img src="{{ img }}" alt="photo" loading="lazy" onclick="openLightbox(this.src)">
             </div>
             {% endfor %}
         </div>
