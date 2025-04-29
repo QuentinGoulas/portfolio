@@ -1,32 +1,47 @@
-from flask import Flask, render_template, send_from_directory
+from flask import Flask, render_template, url_for
 import os
 
 app = Flask(__name__)
 
-# Emplacement des images, à adapter selon ton VPS
-BASE_IMAGE_PATH = "/home/ubuntu/fichiers/photos/portfolio"
-if os.name == "nt":
-    BASE_IMAGE_PATH = "C:\\Users\\goula\\Pictures\\Photos Portfolio -20250420T011033Z-001\\Photos Portfolio"
-
 @app.route("/")
-def index():
-    categories = {}
-    for category in os.listdir(BASE_IMAGE_PATH):
-        category_path = os.path.join(BASE_IMAGE_PATH, category)
-        if os.path.isdir(category_path):
-            images = [
-                f"/images/{category}/{img}"
-                for img in os.listdir(category_path)
-                if img.lower().endswith(('.jpg', '.jpeg', '.png', '.gif'))
-            ]
-            categories[category] = images
-    return render_template("index.html", categories=categories)
+def home():
+    return render_template("index.html")
 
-# Route spéciale pour servir les images
-@app.route("/images/<category>/<filename>")
-def serve_image(category, filename):
-    image_folder = os.path.join(BASE_IMAGE_PATH, category)
-    return send_from_directory(image_folder, filename)
+@app.route("/photos")
+def photos():
+    images = []
+    # Path to the images in the static folder
+    static_folder = os.path.join(app.static_folder, 'Photos Portfolio/Photographie')
+    
+    # Get all image files from the static/photos directory
+    if os.path.exists(static_folder):
+        for file in os.listdir(static_folder):
+            if file.lower().endswith(('.jpg', '.jpeg', '.png', '.gif')):
+                # Create the URL for the image using url_for
+                image_path = url_for('static', filename=f'Photos Portfolio/Photographie/{file}')
+                images.append(image_path)
+    
+    return render_template("photos.html", images=images)
+
+@app.route("/designs")
+def designs():
+    images = []
+    # Path to the images in the static folder
+    static_folder = os.path.join(app.static_folder, 'Photos Portfolio/Design')
+    
+    # Get all image files from the static/photos directory
+    if os.path.exists(static_folder):
+        for file in os.listdir(static_folder):
+            if file.lower().endswith(('.jpg', '.jpeg', '.png', '.gif')):
+                # Create the URL for the image using url_for
+                image_path = url_for('static', filename=f'Photos Portfolio/Design/{file}')
+                images.append(image_path)
+    
+    return render_template("designs.html", images=images)
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
 
 if __name__ == "__main__":
-    app.run(debug=True,host='0.0.0.0' ,port=5000)
+    app.run(debug=True)
