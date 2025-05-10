@@ -79,7 +79,7 @@ def photos():
         for file in os.listdir(photos_folder):
             if file.lower().endswith(('.jpg', '.jpeg', '.png', '.gif')):
                 # Create URL for the images using the custom route
-                image_path = f'/fichiers/photos/portfolio/Photographie{file}'
+                image_path = f'/fichiers/photos/portfolio/Photographie/{file}'
                 images.append(image_path)
     
     return render_template("photos.html", images=images)
