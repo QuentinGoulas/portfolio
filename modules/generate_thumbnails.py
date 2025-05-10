@@ -16,8 +16,8 @@ for category in categories:
         if filename.lower().endswith(('.jpg', '.jpeg', '.png')):
             src_path = os.path.join(src_folder, filename)
             thumb_path = os.path.join(thumb_folder, filename)
-            if not os.path.exists(thumb_path):  # Avoid regenerating
-                img = Image.open(src_path)
-                img.thumbnail((300, 300))
-                img.save(thumb_path)
-                print(f"Generated thumbnail for {filename} in {category}")
+            # if not os.path.exists(thumb_path):  # Avoid regenerating
+            img = Image.open(src_path)
+            img.thumbnail((500, 500))
+            img.save(thumb_path, "JPEG", quality=50)
+            print(f"Generated thumbnail for {filename} in {category}")
