@@ -14,7 +14,13 @@ def custom_static(filename):
     # Paramètres de qualité depuis l'URL (par défaut: 100% qualité)
     quality = request.args.get('quality', default=100, type=int)
     width = request.args.get('width', default=None, type=int)
-
+    if quality < 0 or quality > 100:
+        return "Quality must be between 0 and 100", 400
+    
+    if quality == 100 and width is None:
+        # Serve the original image without compression
+        return send_from_directory(IMAGES_FOLDER, filename)
+    
     # Chemin vers l'image originale
     image_path = os.path.join(IMAGES_FOLDER, filename)
     
