@@ -1,4 +1,6 @@
-from flask import Flask, render_template, send_from_directory, url_for
+from flask import Flask, render_template, send_from_directory, url_for, send_file, request
+from PIL import Image
+import io
 import os
 
 app = Flask(__name__)
@@ -9,7 +11,58 @@ IMAGES_FOLDER = os.path.expanduser("~/fichiers")
 # Register the custom route to serve files from the external folder
 @app.route('/fichiers/<path:filename>')
 def custom_static(filename):
-    return send_from_directory(IMAGES_FOLDER, filename)
+    # Paramètres de qualité depuis l'URL (par défaut: 100% qualité)
+    quality = request.args.get('quality', default=100, type=int)
+    width = request.args.get('width', default=None, type=int)
+
+    # Chemin vers l'image originale
+    image_path = os.path.join(IMAGES_FOLDER, filename)
+    
+    # Ouvrir l'image
+    img = Image.open(image_path)
+    
+    # Redimensionner si nécessaire
+    if width:
+        # Calculer la hauteur proportionnellement
+        ratio = width / img.width
+        height = int(img.height * ratio)
+        img = img.resize((width, height), Image.LANCZOS)
+    
+    # Préparer un buffer pour stocker l'image compressée
+    buffer = io.BytesIO()
+    
+    # Sauvegarder avec la qualité réduite
+    img.save(buffer, format='JPEG', quality=quality)
+    buffer.seek(0)
+    return send_file(buffer, mimetype='image/jpeg')
+    # return send_from_directory(IMAGES_FOLDER, filename)
+
+# @app.route('/image/<filename>')
+# def serve_image(filename):
+#     # Paramètres de qualité depuis l'URL (par défaut: 100% qualité)
+#     quality = request.args.get('quality', default=100, type=int)
+#     width = request.args.get('width', default=None, type=int)
+
+#     # Chemin vers l'image originale
+#     image_path = os.path.join(IMAGES_FOLDER, filename)
+    
+#     # Ouvrir l'image
+#     img = Image.open(image_path)
+    
+#     # Redimensionner si nécessaire
+#     if width:
+#         # Calculer la hauteur proportionnellement
+#         ratio = width / img.width
+#         height = int(img.height * ratio)
+#         img = img.resize((width, height), Image.LANCZOS)
+    
+#     # Préparer un buffer pour stocker l'image compressée
+#     buffer = io.BytesIO()
+    
+#     # Sauvegarder avec la qualité réduite
+#     img.save(buffer, format='JPEG', quality=quality)
+#     buffer.seek(0)
+#     return send_file(buffer, mimetype='image/jpeg')
 
 @app.route("/")
 def home():

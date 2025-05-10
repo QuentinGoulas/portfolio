@@ -2,4 +2,4 @@ __pycache__/
 .vscode/
 .venv/
 static/Photos Portfolio
-.tests/
+tests/
